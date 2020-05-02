@@ -34,7 +34,7 @@
 #------------------------------------------------------------------------------
 include sources.mk
 
-TARGET = c1m2
+TARGET = c1m4
 OBJS = $(SRCS:.c=.o)
 OBJS_I = $(SRCS:.c=.i)
 OBJS_ASM = $(SRCS:.c=.asm)
@@ -57,22 +57,20 @@ FPU = fpv4-sp-d16
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 PLTFRM_FLAGS = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS) -march=$(ARCH_TYPE) -mfloat-abi=$(ABI) -mfpu=$(FPU)
-CPPFLAGS = -Wall -Werror -g -O0 -std=c99
-CFLAGS = $(CPPFLAGS) $(PLTFRM_FLAGS) $(INCLUDES) -DMSP432 
+CPPFLAGS = $(INCLUDES) -DMSP432 
+CFLAGS = -Wall -Werror -g -O0 -std=c99 $(PLTFRM_FLAGS)
 LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
+ASMFLAG = arm-none-eabi-objdump
 
 else
 
 # PLATFORM=HOST
 
 CC = gcc
-CPPFLAGS = -Wall -Werror -g -O0 -std=c99
-CFLAGS = $(CPPFLAGS) $(INCLUDES) -DHOST
+CPPFLAGS = $(INCLUDES) -DHOST
+CFLAGS = -Wall -Werror -g -O0 -std=c99
 LDFLAGS = -Wl,-Map=$(TARGET).map
-
-#Changing SRCS to only files related to HOST machines
-SRCS = main.c \
-	memory.c
+ASMFLAG = objdump
 
 endif
 
@@ -80,7 +78,7 @@ endif
 	$(CC) -E $< $(CFLAGS) $(CPPFLAGS) -o $@
 
 $(TARGET).asm : $(TARGET).out
-	objdump -S -d $^ > $@
+	$(ASMFLAG) -S -d $^ > $@
 
 %.asm : %.c
 	$(CC) -S $(CFLAGS) $(CPPFLAGS) $< -o $@
@@ -89,10 +87,10 @@ $(TARGET).asm : $(TARGET).out
 	$(CC) -c $< $(CFLAGS) $(CPPFLAGS) -o $@
 
 %.d : %.c
-	$(CC) $(CFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(OBJS)" "$<"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(OBJS)" "$<"
 
 $(TARGET).out: $(OBJS)
-	$(CC) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $@
+	$(CC) $(OBJS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
 .PHONY: compile-all
 compile-all: $(OBJS)

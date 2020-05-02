@@ -18,7 +18,12 @@
 
 
 #include <stdio.h>
-//#include "stats.h"
+#include "stats.h"
+#include "platform.h"
+
+#ifdef VERBOSE
+  print_array();
+#endif
 
 /* Size of the Data Set */
 #define SIZE (40)
@@ -30,26 +35,26 @@ unsigned char find_median(unsigned char* array,unsigned int length);
 unsigned char find_mean(unsigned char* array,unsigned int length);
 unsigned char find_minimum(unsigned char* array, unsigned int length);
 unsigned char find_maximum(unsigned char* array, unsigned int length);
-void sort_array(unsigned char* array, int length);
+void sort_array(unsigned char* array, unsigned int length);
 
 void print_statistics(unsigned char* array,unsigned int length){
-	printf("Mean: ");
-	printf("%d",find_mean(array,length));
-	printf("\nMedian: ");
-	printf("%d",find_median(array,length));
-	printf("\nMinimum: ");
-	printf("%d",find_minimum(array,length));
-	printf("\nMaximum: ");
-	printf("%d",find_maximum(array,length));
+	PRINTF("Mean: ");
+	PRINTF("%d",find_mean(array,length));
+	PRINTF("\nMedian: ");
+	PRINTF("%d",find_median(array,length));
+	PRINTF("\nMinimum: ");
+	PRINTF("%d",find_minimum(array,length));
+	PRINTF("\nMaximum: ");
+	PRINTF("%d",find_maximum(array,length));
 }
 
 void print_array(unsigned char* array, unsigned int length){
-	printf("\n\n");
+	PRINTF("\n\n");
 	for(int i=0;i<length;i++){
-		printf("%d",*(array+i));
-		printf(", ");
+		PRINTF("%d",*(array+i));
+		PRINTF(", ");
 	}
-	printf("\n\n");
+	PRINTF("\n\n");
 }
 
 unsigned char find_median(unsigned char* array,unsigned int length){
@@ -75,7 +80,7 @@ unsigned char find_maximum(unsigned char* array, unsigned int length){
 	return(*array);
 }
 
-void sort_array(unsigned char array[], int length){
+void sort_array(unsigned char* array, unsigned int length){
 	int i=0,j=0,temp;
 	for(i=0;i<40;i++) {
 		for(j=0;j<40-i-1;j++){
@@ -86,19 +91,4 @@ void sort_array(unsigned char array[], int length){
             		}
        		}
     	}
-}
-
-void main() {
-
-	unsigned char test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
-                            	114, 88,   45,  76, 123,  87,  25,  23,
-                              	200, 122, 150, 90,   92,  87, 177, 244,
-                                201,   6,  12,  60,   8,   2,   5,  67,
-                                7,  87, 250, 230,  99,   3, 100,  90};
-	unsigned char *ptr;
-	ptr=test;
-	print_array(ptr, SIZE);
-	print_statistics(ptr, SIZE);
-	sort_array(ptr, SIZE);
-	print_array(ptr, SIZE);
 }

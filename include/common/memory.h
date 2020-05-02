@@ -90,4 +90,74 @@ void set_all(char * ptr, char value, unsigned int size);
  */
 void clear_all(char * ptr, unsigned int size);
 
+/**
+ * @brief Moves memory components from one pointer to another
+ *
+ * @param ptr Pointer to source
+ * @param size Number of elements to move
+ *
+ * @return pointer.
+ */
+uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length);
+
+/**
+ * @brief Copies memory components from one pointer to another
+ *
+ * @param Pointer to source
+ * @param Pointer to destination
+ * @param Number of elements to copy
+ *
+ * @return pointer.
+ */
+uint8_t * my_memcopy(uint8_t * src, uint8_t * dst, size_t length);
+
+/**
+ * @brief Sets all following memory components to value
+ *
+ * @param Pointer to source
+ * @param Value to set
+ * @param Number of elements to move
+ *
+ * @return pointer.
+ */
+uint8_t * my_memset(uint8_t * src, size_t length, uint8_t value);
+
+/**
+ * @brief Sets all following memory components to 0
+ *
+ * @param Pointer to source
+ * @param Number of elements to move
+ *
+ * @return pointer.
+ */
+uint8_t * my_memzero(uint8_t * src, size_t length);
+
+/**
+ * @brief Reverses the order of memory components
+ *
+ * @param ptr Pointer to source
+ * @param size Number of elements to reverse
+ *
+ * @return pointer.
+ */
+uint8_t * my_reverse(uint8_t * src, size_t length);
+
+/**
+ * @brief Reserves space for memory components
+ *
+ * @param Number of elements to reserve
+ *
+ * @return pointer.
+ */
+int32_t * reserve_words(size_t length);
+
+/**
+ * @brief Frees memory space
+ *
+ * @param Pointer to free memory for
+ *
+ * @return void.
+ */
+void free_words(uint32_t * src);
+
 #endif /* __MEMORY_H__ */
