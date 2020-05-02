@@ -21,10 +21,6 @@
 #include "stats.h"
 #include "platform.h"
 
-#ifdef VERBOSE
-  print_array();
-#endif
-
 /* Size of the Data Set */
 #define SIZE (40)
 int sum=0, mean=0;
@@ -49,12 +45,16 @@ void print_statistics(unsigned char* array,unsigned int length){
 }
 
 void print_array(unsigned char* array, unsigned int length){
-	PRINTF("\n\n");
+#ifdef VERBOSE
+
+  PRINTF("\n\n");
 	for(int i=0;i<length;i++){
 		PRINTF("%d",*(array+i));
 		PRINTF(", ");
 	}
 	PRINTF("\n\n");
+
+#endif
 }
 
 unsigned char find_median(unsigned char* array,unsigned int length){

@@ -25,6 +25,8 @@
 #include "data.h"
 #include "stats.h"
 
+//uint32_t BASE_16=16, BASE_10=10;
+
 int8_t test_data1() {
   uint8_t * ptr;
   int32_t num = -4096;
@@ -119,7 +121,10 @@ int8_t test_memmove1() {
     }
   }
 
+  PRINTF("%d", (int)ret);
+
   free_words( (uint32_t*)set );
+  PRINTF("%d", (int)ret);
   return ret;
 }
 
@@ -195,7 +200,6 @@ int8_t test_memmove3() {
       ret = TEST_ERROR;
     }
   }
-
 
   free_words( (uint32_t*)set );
   return ret;
@@ -317,7 +321,6 @@ int8_t test_reverse()
       ret = TEST_ERROR;
     }
   }
-
   free_words( (uint32_t*)copy );
   return ret;
 }

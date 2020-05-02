@@ -40,37 +40,47 @@ OBJS_I = $(SRCS:.c=.i)
 OBJS_ASM = $(SRCS:.c=.asm)
 OBJS_D = $(SRCS:.c=.d)
 
-ifeq ($(PLATFORM),MSP432)
+ifeq ($(PLATFORM),HOST)
 
-# PLATFORM=MSP432
+	# PLATFORM=HOST
 
-# Architectures Specific Flags
-LINKER_FILE = msp432p401r.lds
-CPU = cortex-m4
-ARCH = thumb
-SPECS = nosys.specs
-ARCH_TYPE = armv7e-m
-ABI = hard
-FPU = fpv4-sp-d16
+	CC = gcc
+	CPPFLAGS = $(INCLUDES) -DHOST
+	CFLAGS = -Wall -Werror -g -O0 -std=c99
+	LDFLAGS = -Wl,-Map=$(TARGET).map
+	ASMFLAG = objdump
+	
+else
 
-# Compiler Flags and Defines
-CC = arm-none-eabi-gcc
-LD = arm-none-eabi-ld
-PLTFRM_FLAGS = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS) -march=$(ARCH_TYPE) -mfloat-abi=$(ABI) -mfpu=$(FPU)
-CPPFLAGS = $(INCLUDES) -DMSP432 
-CFLAGS = -Wall -Werror -g -O0 -std=c99 $(PLTFRM_FLAGS)
-LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
-ASMFLAG = arm-none-eabi-objdump
+	# PLATFORM=MSP432
+
+	# Architectures Specific Flags
+	LINKER_FILE = msp432p401r.lds
+	CPU = cortex-m4
+	ARCH = thumb
+	SPECS = nosys.specs
+	ARCH_TYPE = armv7e-m
+	ABI = hard
+	FPU = fpv4-sp-d16
+
+	# Compiler Flags and Defines
+	CC = arm-none-eabi-gcc
+	LD = arm-none-eabi-ld
+	PLTFRM_FLAGS = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS) -march=$(ARCH_TYPE) -mfloat-abi=$(ABI) -mfpu=$(FPU)
+	CPPFLAGS = $(INCLUDES) -DMSP432 
+	CFLAGS = -Wall -Werror -g -O0 -std=c99 $(PLTFRM_FLAGS)
+	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
+	ASMFLAG = arm-none-eabi-objdump
+
+endif
+
+ifeq ($(VERBOSE),1)
+
+	VRBS = -DVERBOSE
 
 else
 
-# PLATFORM=HOST
-
-CC = gcc
-CPPFLAGS = $(INCLUDES) -DHOST
-CFLAGS = -Wall -Werror -g -O0 -std=c99
-LDFLAGS = -Wl,-Map=$(TARGET).map
-ASMFLAG = objdump
+	VRBS = 
 
 endif
 
@@ -84,7 +94,7 @@ $(TARGET).asm : $(TARGET).out
 	$(CC) -S $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 %.o : %.c
-	$(CC) -c $< $(CFLAGS) $(CPPFLAGS) -o $@
+	$(CC) -c $< $(CFLAGS) $(CPPFLAGS) -DCOURSE1 $(VRBS) -o $@
 
 %.d : %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(OBJS)" "$<"

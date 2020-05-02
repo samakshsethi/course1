@@ -24,6 +24,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "memory.h"
+#include "platform.h"
 
 /***********************************************************
  Function Definitions
@@ -53,15 +54,15 @@ void clear_all(char * ptr, unsigned int size){
 
 uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length){
 	if(src>dst){
-		for(size_t i=0;i<length;i++){
+		for(size_t i=0;(int)i<length;i++){
 			*(dst+i)=*(src+i);
-			free(src+i);
+			//free((uint32_t*) (src+i));
 		}
 	}
 	else if(src<dst){
-		for(size_t i=length;i>0;i--){
+		for(size_t i=length-1;(int)i>=0;i--){
 			*(dst+i)=*(src+i);
-			free(src+i);
+			//free((uint32_t*) (src+i));
 		}
 	}
 	return dst;
@@ -92,8 +93,8 @@ uint8_t * my_reverse(uint8_t * src, size_t length){
 	uint8_t temp;
 	for(size_t i=0;i<length/2;i++){
 		temp=*(src+i);
-		*(src+i)=*(src+length-i);
-		*(src+length-i)=temp;
+		*(src+i)=*(src+length-i-1);
+		*(src+length-i-1)=temp;
 	}
 	return src;
 }
@@ -103,9 +104,5 @@ int32_t * reserve_words(size_t length){
 }
 
 void free_words(uint32_t * src){
-	for(size_t i=0;i<sizeof(int32_t);i++){
-		free(src+i);
-	}
+	free(src);
 }
-
-

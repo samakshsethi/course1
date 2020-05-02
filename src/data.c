@@ -20,6 +20,8 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "data.h"
+#include "memory.h"
+#include "platform.h"
 
 uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 	uint32_t temp, f=0;
@@ -43,8 +45,7 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 		i++;
 	}
 	*(ptr+i)='\0';
-	//ptr=my_reverse(ptr,i);
-	i++;
+	ptr=my_reverse(ptr,i);
 	return (uint8_t)i;
 }
 
